@@ -1,0 +1,35 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "npx ts-node --project tsconfig.json -r tsconfig-paths/register src/server.ts",
+    "dev": "npx ts-node-dev --respawn --transpileOnly -r tsconfig-paths/register src/server.ts",
+    "start": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0502-crew/youtube4me.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0502-crew/youtube4me/issues"
+  },
+  "homepage": "https://github.com/0502-crew/youtube4me#readme",
+  "dependencies": {
+    "@types/node": "^13.9.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "google-auth-library": "^5.10.1",
+    "googleapis": "^48.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^8.8.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.8.3"
+  }
+}
