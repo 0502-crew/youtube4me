@@ -1,10 +1,11 @@
 import { NotificationsResource } from './resources/NotificationsResource';
+import { DBMgr } from './mgr/db/DbMgr';
+import * as express from 'express';
+import * as BodyParser from 'body-parser';
+import * as cors from 'cors';
 
-const express = require('express');
-const BodyParser = require('body-parser');
 const app = express();
 const port = 45012;
-const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,11 @@ app.get('/notifications',function(req,res) {
     const videoIds = await new NotificationsResource().getAllNotifications();
     res.json(videoIds);
   })();
+});
+
+app.get('/test',function(req,res) {
+  const dbMgr = DBMgr.get();
+  res.send();
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

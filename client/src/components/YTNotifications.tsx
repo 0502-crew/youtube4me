@@ -27,8 +27,8 @@ export class YTNotifications extends React.Component<YTNotificationsProps, YTNot
   render(): React.ReactNode {
     return (
       <div>
-        {this.state.videoIDs.map((videoID) => (
-          <div> {videoID}</div>
+        {this.state.videoIDs.map((videoID, index) => (
+          <div key={index}> {videoID}</div>
         ))}
       </div>
     );
