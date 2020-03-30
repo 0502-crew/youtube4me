@@ -16,13 +16,23 @@ app.use(express.static('./public'));
 
 app.get('/notifications',function(req,res) {
   (async () => {
-    const videoIds = await new NotificationsResource().getAllNotifications();
-    res.json(videoIds);
+    const notifications = await new NotificationsResource().getAllNotifications();
+    res.json(notifications);
   })();
 });
 
 app.get('/test',function(req,res) {
   const dbMgr = DBMgr.get();
+  /*
+  dbMgr.addNotifications([
+    {date: '1', id: '1', videoID: '1'},
+    {date: '2', id: '2', videoID: '2'},
+    {date: '3', id: '3', videoID: '3'}
+  ]);
+  dbMgr.removeNotifications([{date: '1', id: '1', videoID: '1'},{date: '3', id: '3', videoID: '3'}]);
+  dbMgr.removeNotification({date: '2', id: '2', videoID: '2'});
+  console.log(dbMgr.getNotifications());
+  */
   res.send();
 });
 

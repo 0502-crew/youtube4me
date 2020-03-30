@@ -35,13 +35,11 @@ export class GmailMgr {
           const messages = messagesResult.data.messages;
           if (typeof messages !== 'undefined') {
             const emails: gmail_v1.Schema$Message[] = [];
-            await (async () => {
-              return Promise.all(messages.map(message =>
-                this.getEmailById(message.id as string).then(emailResult => {
-                  emails.push(emailResult.data);
-                })
-              ));
-            })();
+            await Promise.all(messages.map(message =>
+              this.getEmailById(message.id as string).then(emailResult => {
+                emails.push(emailResult.data);
+              })
+            ));
             
             // Return all the emails found
             return emails;
