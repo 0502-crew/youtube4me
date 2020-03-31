@@ -2,6 +2,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { CONFIG } from '@src/config/Config';
 import { google, youtube_v3 } from 'googleapis';
 import { IVideoDetails, IThumbnail } from '../db/IDatabase';
+import { Utils } from '@src/util/Utils';
 
 export class YoutubeMgr {
   private youtube: youtube_v3.Youtube;
@@ -23,7 +24,7 @@ export class YoutubeMgr {
      * Call has a limit of 50 videos per call
      */
     const videoDetailsMap: {[id: string]: IVideoDetails} = {};
-    await Promise.all(this.chunk(ids, 50).map(fiftyIds => {
+    await Promise.all(Utils.chunk(ids, 50).map(fiftyIds => {
       return this.youtube.videos.list({
         part: 'id, contentDetails, snippet',
         id: fiftyIds.join(',')
@@ -79,18 +80,6 @@ export class YoutubeMgr {
         });
       });
     }));
-    
-    console.log(videoDetailsMap);
     return videoDetailsMap;
-  }
-
-  private chunk(array: any[], size: number) {
-    const chunkedArray: any[] = [];
-    let index = 0;
-    while (index < array.length) {
-      chunkedArray.push(array.slice(index, size + index));
-      index += size;
-    }
-    return chunkedArray;
   }
 }

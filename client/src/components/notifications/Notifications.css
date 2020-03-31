@@ -1,0 +1,50 @@
+.page-navigation {
+  margin-bottom: 1em;
+}
+.page-navigation span {
+  color: white;
+  cursor: pointer;
+  padding-right : 1em;
+}
+
+.notifications .notification {
+  margin-bottom: 1em;
+}
+
+.notifications .notification a {
+  display: flex;
+  color: white;
+  text-decoration: inherit; /* no underline */
+}
+
+.thumbnail.mobile {
+  display: none;
+}
+
+.video-details {
+  display: initial;
+}
+
+.title, .description {
+  margin-left: 1rem;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+  .thumbnail.mobile {
+    display: initial;
+  }
+  .thumbnail.desktop {
+    display: none;
+  }
+  .title {
+    font-size: 1.2em;
+  }
+  .description {
+    display: none;
+  }
+}

@@ -1,15 +1,19 @@
 import './App.css';
+import './reset.css';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { YTNotifications } from '@src/components/YTNotifications';
+import { Notifications } from '@src/components/notifications/Notifications';
+import { NavBar } from './components/navbar/NavBar';
 
 class App extends React.Component {
-  render() {
+  render(): React.ReactNode {
     return (
       <div className='App'>
-        <h1>Hello world!</h1>
-        <YTNotifications />
+        <NavBar />
+        <main>
+          <Notifications />
+        </main>
       </div>
     );
   }

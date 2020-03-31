@@ -2,16 +2,18 @@ import { GmailMgr, LABELS } from '@src/mgr/google-api/GmailMgr';
 import { DBMgr } from '@src/mgr/db/DbMgr';
 import { INotification } from '@src/mgr/db/IDatabase';
 import { YoutubeMgr } from '@src/mgr/google-api/YoutubeMgr';
+import { NotificationsRO } from './NotificationsRO';
+import { Utils } from '@src/util/Utils';
 
 export class NotificationsResource {
   private gmailMgr = new GmailMgr();
   private youtubeMgr = new YoutubeMgr();
   private dbMgr = DBMgr.get();
 
-  public async getAllNotifications(): Promise<INotification[]> {
+  public async getAllNotifications(page: number = 0): Promise<NotificationsRO> {
     const messages = await this.gmailMgr.getEmailsByLabel(LABELS.YTNew);
     // Make deep clone so that the list can be edited
-    const allDBNotifications = this.dbMgr.getNotifications(true);
+    let allDBNotifications = this.dbMgr.getNotifications(true);
     /*
      * Filter out the messages that don't exist in the DB yet so that only new ones make calls to google API (saves resources)
      * Remove the notifications from the DB that no longer exist in the messages (messages is master)
@@ -25,7 +27,6 @@ export class NotificationsResource {
       return {message: message, videoID: this.gmailMgr.extractYoutubeVideoIDFromEmail(message) as string}
     }).filter(x => x.videoID !== null);
     const videoDetailsMap = await this.youtubeMgr.getVideoDetails(messageVideoIDs.map(x => x.videoID));
-    // console.log(videoDetailsMap);
     messageVideoIDs.map(messageVideoID => {
       newNotifications.push({
         id: messageVideoID.message.id as string,
@@ -34,6 +35,25 @@ export class NotificationsResource {
       });
     });
     this.dbMgr.addNotifications(newNotifications);
-    return this.dbMgr.getNotifications(true);
+    allDBNotifications = this.dbMgr.getNotifications(true);
+    const notificationPages = Utils.chunk(allDBNotifications, 10);
+    if(notificationPages.length === 0) {
+      return {
+        currentPage: 0,
+        lastPage: 0,
+        notifications: []
+      }
+    } else {
+      if (page < 0) {
+        page = 0;
+      } else if(page >= notificationPages.length) {
+        page = notificationPages.length -1;
+      }
+      return {
+        currentPage: page,
+        lastPage: notificationPages.length -1,
+        notifications: notificationPages[page]
+      }
+    }
   }
 }

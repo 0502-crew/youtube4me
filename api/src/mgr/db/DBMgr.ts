@@ -6,9 +6,6 @@ import { INITIAL_DB, INotification, NOTIFICATIONS, NOTIFICATION_DATE, NOTIFICATI
 /**
  * Uses https://www.npmjs.com/package/lowdb
  */
-
-interface Notifications extends Array<string>{}
-
 export class DBMgr {
   private readonly JSON_DB_FILE = path.join(process.cwd(), 'db/db.json');
   private static instance: DBMgr;
@@ -30,7 +27,7 @@ export class DBMgr {
 
   public getNotificationByVideoID(videoID: string): INotification|null|undefined {
     const results: INotification[] = this.db.get(NOTIFICATIONS)
-      .filter({videoID: videoID})
+      .filter((notification) => notification.videoDetails.id === videoID)
       .value();
     return results.length === 0 ? null : results[0];
   }
@@ -41,7 +38,7 @@ export class DBMgr {
     if (deepClone) {
       notifications = notifications.cloneDeep();
     }
-    return notifications.value();
+    return notifications.reverse().value();
   }
 
   public addNotification(notification: INotification): void {

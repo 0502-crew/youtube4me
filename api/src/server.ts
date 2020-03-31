@@ -1,4 +1,4 @@
-import { NotificationsResource } from './resources/NotificationsResource';
+import { NotificationsResource } from './resources/notifications/NotificationsResource';
 import { DBMgr } from './mgr/db/DbMgr';
 import * as express from 'express';
 import * as BodyParser from 'body-parser';
@@ -14,10 +14,10 @@ app.use(BodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('./public'));
 
-app.get('/notifications',function(req,res) {
+app.get('/notifications/:page',function(req,res) {
   (async () => {
-    const notifications = await new NotificationsResource().getAllNotifications();
-    res.json(notifications);
+    const notificationsRO = await new NotificationsResource().getAllNotifications(Number(req.params.page));
+    res.json(notificationsRO);
   })();
 });
 

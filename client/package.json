@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack-dev-server --mode development --host 192.168.1.184",
     "build": "webpack --mode production"
   },
   "repository": {
