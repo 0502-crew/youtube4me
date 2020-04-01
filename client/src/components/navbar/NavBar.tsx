@@ -5,7 +5,7 @@ export class NavBar extends React.Component {
   render(): React.ReactNode {
     return (
       <div className='navbar'>
-        <a href="javascript: void(0);">Notifications</a>
+        <a href="#">Notifications</a>
       </div>
     );
   }

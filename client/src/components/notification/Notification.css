@@ -1,22 +1,32 @@
-.notification {
+.notification-views {
   margin-bottom: 1em;
+}
+
+.notification-views.deleted {
+  display: none;
 }
 
 a {
   color: white;
   text-decoration: inherit; /* no underline */
 }
-.notification {
+.notification-view, .delete-view {
   display: flex;
   color: white;
 }
 
+.thumbnail.desktop {
+  height: 180px;
+}
 .thumbnail.mobile {
+  height: 90px;
   display: none;
 }
 
 .video-details {
   display: initial;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .title, .description {
@@ -43,6 +53,22 @@ a {
   cursor: pointer;
 }
 
+.notification-view .delete-icon {
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.delete-view {
+  border: solid 2px white;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 180px;
+}
+.delete-view .delete-icon {
+  font-size: 3rem;
+  margin: auto;
+}
+
 @media screen and (max-width: 600px) {
   .thumbnail.mobile {
     display: initial;
@@ -51,9 +77,15 @@ a {
     display: none;
   }
   .title {
-    font-size: 1.2em;
+    font-size: 1.0em;
   }
   .description {
+    display: none;
+  }
+  .delete-view {
+    height: 90px;
+  }
+  .notification-view .delete-icon {
     display: none;
   }
 }

@@ -4,25 +4,27 @@ import * as React from 'react';
 import * as bent from 'bent';
 import { INotification } from '@src/models/api/INotification';
 import { NotificationsRO } from '@src/models/api/NotificationsRO';
-import { PageNavigation } from '../page-navigation/PageNavigation';
 import { Notification } from '../notification/Notification';
+import VisibilitySensor from 'react-visibility-sensor';
+
 
 interface NotificationsState {
   notifications: INotification[]
+  totalShown: number;
 }
 interface NotificationsProps {
   
 }
 
 export class Notifications extends React.Component<NotificationsProps, NotificationsState> {
-  private currentPage = 0;
-  private lastPage = 0;
+  private static readonly SHOWN_INCREMENT = 10;
   private hostname = window.location.hostname;
 
   constructor(props: NotificationsProps) {
     super(props);
     this.state = {
-      notifications: []
+      notifications: [],
+      totalShown: 0
     }
   }
 
@@ -32,37 +34,50 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
   
   private getNotifications = () => {
     (async () => {
-      const notificationsRO: NotificationsRO = await bent('json')(`http://${this.hostname}:45012/notifications/${this.currentPage}`) as NotificationsRO;
-      this.currentPage = notificationsRO.currentPage;
-      this.lastPage = notificationsRO.lastPage;
-      this.setState({notifications: notificationsRO.notifications});
+      try {
+        const notificationsRO: NotificationsRO = await bent('json')(`http://${this.hostname}:45012/notifications`) as NotificationsRO;
+        const totalShown = this.calcTotalShown(Notifications.SHOWN_INCREMENT, notificationsRO.notifications);
+        this.setState({notifications: notificationsRO.notifications, totalShown});
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }
 
-  private nextPage = () => {
-    if(this.currentPage < this.lastPage) {
-      this.currentPage++;
-      this.getNotifications();
-    }
+  private calcTotalShown(wantedTotal: number, notifications: INotification[]) {
+    return wantedTotal > notifications.length ? notifications.length : wantedTotal;
   }
 
-  private prevPage = () => {
-    if(this.currentPage > 0) {
-      this.currentPage--;
-      this.getNotifications();
+  private incrementTotalShown = () => {
+    const totalShown = this.calcTotalShown(this.state.totalShown + Notifications.SHOWN_INCREMENT, this.state.notifications);
+    this.setState({totalShown});
+  }
+
+  private onIncrementShownTrigger = (isVisible: boolean) => {
+    if (isVisible) {
+      this.incrementTotalShown();
     }
   }
 
   render(): React.ReactNode {
+
+    const shownNotifications = this.state.notifications.slice(0, this.state.totalShown);
     return (
       <div className='notifications'>
-        <PageNavigation currentPage={this.currentPage} lastPage={this.lastPage} onClickPrev={this.prevPage} onClickNext={this.nextPage} />
         {
-          this.state.notifications.map((notification, index) => (
-            <Notification key={index} notification={notification} />
+          shownNotifications.map((notification, index) => (
+            <div key={index}>
+              <Notification notification={notification} />
+              {
+                (index === shownNotifications.length - 1 ) ?
+                <VisibilitySensor onChange={this.onIncrementShownTrigger}>
+                  <span className='increment-shown-trigger'>&nbsp;</span>
+                </VisibilitySensor>
+                : null
+              }
+            </div>
           ))
         }
-        <PageNavigation currentPage={this.currentPage} lastPage={this.lastPage} onClickPrev={this.prevPage} onClickNext={this.nextPage} />
       </div>
     );
   }

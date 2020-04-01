@@ -16,6 +16,13 @@ app.use(BodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('./public'));
 
+app.get('/notifications',function(req,res) {
+  (async () => {
+    const notificationsRO = await notificationsResource.getAllNotifications();
+    res.json(notificationsRO);
+  })();
+});
+
 app.get('/notifications/:page',function(req,res) {
   (async () => {
     const notificationsRO = await notificationsResource.getAllNotifications(Number(req.params.page));

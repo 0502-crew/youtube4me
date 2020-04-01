@@ -10,27 +10,10 @@ export class NotificationsResource {
   private youtubeMgr = new YoutubeMgr();
   private dbMgr = DBMgr.get();
 
-  public async getAllNotifications(page: number = 0): Promise<NotificationsRO> {
-    const allDBNotifications = this.dbMgr.getNotifications(true);
-    const notificationPages = Utils.chunk(allDBNotifications, 10);
-    if(notificationPages.length === 0) {
-      return {
-        currentPage: 0,
-        lastPage: 0,
-        notifications: []
-      }
-    } else {
-      if (page < 0) {
-        page = 0;
-      } else if(page >= notificationPages.length) {
-        page = notificationPages.length -1;
-      }
-      return {
-        currentPage: page,
-        lastPage: notificationPages.length -1,
-        notifications: notificationPages[page]
-      }
-    }
+  public getAllNotifications(): NotificationsRO {
+    return {
+      notifications: this.dbMgr.getNotifications(true)
+    };
   }
 
   /**
