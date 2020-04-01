@@ -11,6 +11,42 @@ export class NotificationsResource {
   private dbMgr = DBMgr.get();
 
   public async getAllNotifications(page: number = 0): Promise<NotificationsRO> {
+    const allDBNotifications = this.dbMgr.getNotifications(true);
+    const notificationPages = Utils.chunk(allDBNotifications, 10);
+    if(notificationPages.length === 0) {
+      return {
+        currentPage: 0,
+        lastPage: 0,
+        notifications: []
+      }
+    } else {
+      if (page < 0) {
+        page = 0;
+      } else if(page >= notificationPages.length) {
+        page = notificationPages.length -1;
+      }
+      return {
+        currentPage: page,
+        lastPage: notificationPages.length -1,
+        notifications: notificationPages[page]
+      }
+    }
+  }
+
+  /**
+   * Prefetch the notifications every minute.
+   * When the notifications are requested from this api, it will return what has been prefetched instead of making a call to google in real time
+   */
+  public startPrefetchLoop() {
+    this.updateNotifications().then(() => {
+      setTimeout(() => {
+        this.startPrefetchLoop();
+      }, 60000);
+    });
+  }
+
+  public async updateNotifications(): Promise<void> {
+    const startTime = Date.now();
     const messages = await this.gmailMgr.getEmailsByLabel(LABELS.YTNew);
     // Make deep clone so that the list can be edited
     let allDBNotifications = this.dbMgr.getNotifications(true);
@@ -35,25 +71,6 @@ export class NotificationsResource {
       });
     });
     this.dbMgr.addNotifications(newNotifications);
-    allDBNotifications = this.dbMgr.getNotifications(true);
-    const notificationPages = Utils.chunk(allDBNotifications, 10);
-    if(notificationPages.length === 0) {
-      return {
-        currentPage: 0,
-        lastPage: 0,
-        notifications: []
-      }
-    } else {
-      if (page < 0) {
-        page = 0;
-      } else if(page >= notificationPages.length) {
-        page = notificationPages.length -1;
-      }
-      return {
-        currentPage: page,
-        lastPage: notificationPages.length -1,
-        notifications: notificationPages[page]
-      }
-    }
+    console.log(`Added ${newNotifications.length} notifications to DB and deleted ${deletedNotifications.length} in ${(Date.now() - startTime)/1000} seconds`);
   }
 }

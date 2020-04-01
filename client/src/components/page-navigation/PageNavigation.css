@@ -1,0 +1,15 @@
+.page-navigation {
+  margin-bottom: 1em;
+}
+.page-navigation span {
+  color: white;
+  cursor: pointer;
+}
+
+.prev, .next {
+  font-size: 2rem;
+}
+.location {
+  font-size: 1.5rem;
+  padding : 0 1rem;
+}

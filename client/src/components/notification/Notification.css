@@ -1,0 +1,59 @@
+.notification {
+  margin-bottom: 1em;
+}
+
+a {
+  color: white;
+  text-decoration: inherit; /* no underline */
+}
+.notification {
+  display: flex;
+  color: white;
+}
+
+.thumbnail.mobile {
+  display: none;
+}
+
+.video-details {
+  display: initial;
+}
+
+.title, .description {
+  margin-left: 1rem;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-bottom: 1rem;
+}
+
+.description .overflow {
+  display:none;
+}
+.description.expanded .overflow {
+  display: inherit;
+}
+.description .expand {
+  border: solid 2px white;
+  border-radius: 5px;
+  width: 6em;
+  padding: 0.3em;
+  margin-top: 1em;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .thumbnail.mobile {
+    display: initial;
+  }
+  .thumbnail.desktop {
+    display: none;
+  }
+  .title {
+    font-size: 1.2em;
+  }
+  .description {
+    display: none;
+  }
+}

@@ -4,6 +4,8 @@ import * as express from 'express';
 import * as BodyParser from 'body-parser';
 import * as cors from 'cors';
 
+const notificationsResource: NotificationsResource = new NotificationsResource();
+
 const app = express();
 const port = 45012;
 
@@ -16,13 +18,13 @@ app.use(express.static('./public'));
 
 app.get('/notifications/:page',function(req,res) {
   (async () => {
-    const notificationsRO = await new NotificationsResource().getAllNotifications(Number(req.params.page));
+    const notificationsRO = await notificationsResource.getAllNotifications(Number(req.params.page));
     res.json(notificationsRO);
   })();
 });
 
 app.get('/test',function(req,res) {
-  const dbMgr = DBMgr.get();
+  // const dbMgr = DBMgr.get();
   /*
   dbMgr.addNotifications([
     {date: '1', id: '1', videoID: '1'},
@@ -37,3 +39,6 @@ app.get('/test',function(req,res) {
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+// Prefetch the notifications to speed up api requests to this server
+notificationsResource.startPrefetchLoop();
