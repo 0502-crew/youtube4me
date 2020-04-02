@@ -1,9 +1,9 @@
-import { GmailService, LABELS } from '~/mgr/google-api/GmailService';
-import { DBMgr } from '~/mgr/db/DbMgr';
-import { YoutubeService } from '~/mgr/google-api/YoutubeService';
 import { NotificationsRO } from './NotificationsRO';
-import { INotification } from '~/mgr/db/INotification';
 import { gmail_v1 } from 'googleapis';
+import { YoutubeService } from '../../mgr/google-api/YoutubeService';
+import { DBMgr } from '../../mgr/db/DBMgr';
+import { INotification } from '../../mgr/db/INotification';
+import { GmailService, LABELS } from '../../mgr/google-api/GmailService';
 
 export class NotificationsResource {
   private gmailMgr = new GmailService();
