@@ -1,4 +1,4 @@
-import { INotification } from '@src/mgr/db/INotification';
+import { INotification } from '~/mgr/db/INotification';
 
 export interface NotificationsRO {
   notifications: INotification[];

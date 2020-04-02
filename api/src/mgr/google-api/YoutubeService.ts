@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
-import { CONFIG } from '@src/config/Config';
+import { CONFIG } from '~/config/Config';
 import { google, youtube_v3 } from 'googleapis';
-import { Utils } from '@src/util/Utils';
+import { Utils } from '~/util/Utils';
 import { IVideoDetails, IThumbnail } from '../db/INotification';
 
 export class YoutubeService {
