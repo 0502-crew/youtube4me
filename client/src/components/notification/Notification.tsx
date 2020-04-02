@@ -5,6 +5,8 @@ import { INotification } from '@src/models/api/INotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp, faTrashAlt, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import SwipeableViews from 'react-swipeable-views';
+import * as bent from 'bent';
+import { Utils } from '@src/utils/Utils';
 
 export interface NotificationProps {
   notification: INotification;
@@ -30,6 +32,7 @@ export class Notification extends React.Component<NotificationProps, Notificatio
   }
 
   private deleteNotification = () => {
+    bent(`${Utils.getAPIUrl()}/deleteNotification/${this.props.notification.messageId}`)('');
     this.setState({deleted: true});
   }
 
@@ -37,6 +40,10 @@ export class Notification extends React.Component<NotificationProps, Notificatio
     const notification = this.props.notification;
     const descriptionLines = notification.videoDetails.description.split('\n');
     const videoUrl = `https://www.youtube.com/watch?v=${notification.videoDetails.id}`;
+    const duration = [
+      notification.videoDetails.duration.hours,
+      notification.videoDetails.duration.minutes,
+      notification.videoDetails.duration.seconds].join(':');
     if (this.state.deleted) {
       return null;
     } else {
@@ -46,9 +53,10 @@ export class Notification extends React.Component<NotificationProps, Notificatio
             <FontAwesomeIcon icon={faTrashAlt} className='delete-icon'/>
           </div>
           <div className='notification-view'>
-            <a href={videoUrl} target="_blank">
-              <img src={notification.videoDetails.thumbnails.medium.url} className='thumbnail desktop'/>
-              <img src={notification.videoDetails.thumbnails.medium.url} className='thumbnail mobile'/>
+            <a href={videoUrl} target="_blank" className='thumbnail'>
+              <img src={notification.videoDetails.thumbnails.medium.url} className='desktop'/>
+              <img src={notification.videoDetails.thumbnails.medium.url} className='mobile'/>
+              <span className='length'>{duration}</span>
             </a>
             <div className='video-details'>
               <a href={videoUrl} target="_blank">
@@ -56,6 +64,7 @@ export class Notification extends React.Component<NotificationProps, Notificatio
                   {notification.videoDetails.title}
                 </div>
               </a>
+              <div className='date'>{notification.videoDetails.publishedAt.replace('T',' ').replace('.000Z','')}</div>
               <div className={`description ${(this.state.expandedDescription)? 'expanded' : ''}`}>
                 {
                   descriptionLines.map((line, index) => {

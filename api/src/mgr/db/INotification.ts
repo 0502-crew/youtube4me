@@ -19,9 +19,9 @@ export interface IVideoDetails {
   channelId: string,
   channelTitle: string,
   duration: {
-    hours: number,
-    minutes: number,
-    seconds: number,
+    hours: string,
+    minutes: string,
+    seconds: string,
   },
   caption: boolean,
 }

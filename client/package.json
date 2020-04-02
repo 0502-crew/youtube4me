@@ -1,5 +1,5 @@
 {
-  "name": "youtube4me",
+  "name": "youtube4me_client",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",

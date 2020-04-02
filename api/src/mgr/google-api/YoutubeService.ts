@@ -1,10 +1,10 @@
 import { OAuth2Client } from 'google-auth-library';
 import { CONFIG } from '@src/config/Config';
 import { google, youtube_v3 } from 'googleapis';
-import { IVideoDetails, IThumbnail } from '../db/IDatabase';
 import { Utils } from '@src/util/Utils';
+import { IVideoDetails, IThumbnail } from '../db/INotification';
 
-export class YoutubeMgr {
+export class YoutubeService {
   private youtube: youtube_v3.Youtube;
 
   constructor() {
@@ -37,24 +37,33 @@ export class YoutubeMgr {
            * But it does not have a value if the value is 0. Eg. PT5H51S = 5 hours 0 minutes 51 seconds
            */
           let duration = video.contentDetails?.duration as string;
-          let hours = 0;
-          let minutes = 0;
-          let seconds = 0;
+          let hours = '00';
+          let minutes = '00';
+          let seconds = '00';
           duration = duration.replace('PT', '');
           const hoursIndex = duration.indexOf('H') as number;
           if (hoursIndex > -1) {
-            hours = Number(duration.substr(0, hoursIndex));
-            duration = duration.slice(0, hoursIndex);
+            hours = duration.substr(0, hoursIndex);
+            if (hours.length === 1) {
+              hours = '0' + hours;
+            }
+            duration = duration.slice(hoursIndex+1);
           }
-          const minutesIndex = duration.indexOf('M') as number;
+          const minutesIndex = duration.indexOf('M');
           if (minutesIndex > -1) {
-            hours = Number(duration.substr(0, minutesIndex));
-            duration = duration.slice(0, minutesIndex);
+            minutes = duration.substr(0, minutesIndex);
+            if (minutes.length === 1) {
+              minutes = '0' + minutes;
+            }
+            duration = duration.slice(minutesIndex+1);
           }
-          const secondsIndex = duration.indexOf('S') as number;
+          const secondsIndex = duration.indexOf('S');
           if (secondsIndex > -1) {
-            hours = Number(duration.substr(0, secondsIndex));
-            duration = duration.slice(0, secondsIndex);
+            seconds = duration.substr(0, secondsIndex);
+            if (seconds.length === 1) {
+              seconds = '0' + seconds;
+            }
+            duration = duration.slice(secondsIndex+1);
           }
           videoDetailsMap[video.id as string] = {
             id: video.id as string,

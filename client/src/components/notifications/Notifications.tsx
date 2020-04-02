@@ -6,6 +6,7 @@ import { INotification } from '@src/models/api/INotification';
 import { NotificationsRO } from '@src/models/api/NotificationsRO';
 import { Notification } from '../notification/Notification';
 import VisibilitySensor from 'react-visibility-sensor';
+import { Utils } from '@src/utils/Utils';
 
 
 interface NotificationsState {
@@ -18,7 +19,6 @@ interface NotificationsProps {
 
 export class Notifications extends React.Component<NotificationsProps, NotificationsState> {
   private static readonly SHOWN_INCREMENT = 10;
-  private hostname = window.location.hostname;
 
   constructor(props: NotificationsProps) {
     super(props);
@@ -35,7 +35,7 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
   private getNotifications = () => {
     (async () => {
       try {
-        const notificationsRO: NotificationsRO = await bent('json')(`http://${this.hostname}:45012/notifications`) as NotificationsRO;
+        const notificationsRO: NotificationsRO = await bent('json')(`${Utils.getAPIUrl()}/notifications`) as NotificationsRO;
         const totalShown = this.calcTotalShown(Notifications.SHOWN_INCREMENT, notificationsRO.notifications);
         this.setState({notifications: notificationsRO.notifications, totalShown});
       } catch (e) {

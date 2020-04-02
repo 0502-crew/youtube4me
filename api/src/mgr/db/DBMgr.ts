@@ -1,7 +1,8 @@
 import * as path from 'path';
 import * as lowdb from 'lowdb';
 import * as FileSync from 'lowdb/adapters/FileSync';
-import { INITIAL_DB, INotification, NOTIFICATIONS, NOTIFICATION_DATE, NOTIFICATION_VIDEO_ID, IDatabase } from './IDatabase';
+import { INITIAL_DB, NOTIFICATIONS, NOTIFICATION_DATE, NOTIFICATION_VIDEO_ID, IDatabase } from './IDatabase';
+import { INotification } from './INotification';
 
 /**
  * Uses https://www.npmjs.com/package/lowdb
@@ -25,9 +26,16 @@ export class DBMgr {
     return DBMgr.instance;
   }
 
-  public getNotificationByVideoID(videoID: string): INotification|null|undefined {
+  public getNotificationByVideoID(videoID: string): INotification|null {
     const results: INotification[] = this.db.get(NOTIFICATIONS)
       .filter((notification) => notification.videoDetails.id === videoID)
+      .value();
+    return results.length === 0 ? null : results[0];
+  }
+  
+  public getNotificationByMessageId(messageId: string): INotification|null {
+    const results: INotification[] = this.db.get(NOTIFICATIONS)
+      .filter((notification) => notification.messageId === messageId)
       .value();
     return results.length === 0 ? null : results[0];
   }
@@ -48,12 +56,11 @@ export class DBMgr {
     this.db.get(NOTIFICATIONS).push(...notifications).write();
   }
   
-  public removeNotification(notification: INotification): void {
-    this.removeNotifications([notification]);
+  public removeNotification(messageId: string): void {
+    this.removeNotifications([messageId]);
   }
-  public removeNotifications(notifications: INotification[]): void {
-    const ids = notifications.map(n => n.id);
-    this.db.get(NOTIFICATIONS).remove((x) => ids.includes(x.id)).write();
+  public removeNotifications(messageIds: string[]): void {
+    this.db.get(NOTIFICATIONS).remove((notification) => messageIds.includes(notification.messageId)).write();
   }
 
 }

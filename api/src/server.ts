@@ -1,5 +1,4 @@
 import { NotificationsResource } from './resources/notifications/NotificationsResource';
-import { DBMgr } from './mgr/db/DbMgr';
 import * as express from 'express';
 import * as BodyParser from 'body-parser';
 import * as cors from 'cors';
@@ -23,9 +22,9 @@ app.get('/notifications',function(req,res) {
   })();
 });
 
-app.get('/notifications/:page',function(req,res) {
+app.get('/deleteNotification/:messageid',function(req,res) {
   (async () => {
-    const notificationsRO = await notificationsResource.getAllNotifications(Number(req.params.page));
+    const notificationsRO = await notificationsResource.deleteNotification(req.params.messageid);
     res.json(notificationsRO);
   })();
 });

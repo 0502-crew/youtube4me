@@ -3,12 +3,10 @@ import { google, gmail_v1 } from 'googleapis';
 import { CONFIG } from '@src/config/Config';
 
 export enum LABELS {
-  YTNew = 'YT/YTNew',
-  YTNewMulti = 'YT/YTNewMulti',
-  YTNewLive = 'YT/YTNewLive',
+  YTNew = 'YTNew',
 }
 
-export class GmailMgr {
+export class GmailService {
   private gmail: gmail_v1.Gmail;
 
   constructor() {
@@ -35,6 +33,7 @@ export class GmailMgr {
           const messages = messagesResult.data.messages;
           if (typeof messages !== 'undefined') {
             const emails: gmail_v1.Schema$Message[] = [];
+            messages.sort(function(a, b){return Number(b.internalDate) - Number(a.internalDate)});
             await Promise.all(messages.map(message =>
               this.getEmailById(message.id as string).then(emailResult => {
                 emails.push(emailResult.data);
@@ -92,6 +91,33 @@ export class GmailMgr {
       return urlLine.substring(startIndex, endIndex);
     } else {
       return null;
+    }
+  }
+
+  public async getAllLabels(): Promise<gmail_v1.Schema$Label[]> {
+    try {
+      const response = await this.gmail.users.labels.list({
+        userId: 'me'
+      });
+      const labels = response.data.labels;
+      if (typeof labels !== 'undefined') {
+        return labels;
+      }
+    } catch(e) {
+      console.log(e);
+    }
+    return [];
+  }
+
+  public async removeLabels(messageId: string, labels: string[]) {
+    try {
+      await this.gmail.users.messages.modify({
+        userId: 'me',
+        id: messageId,
+        requestBody: {removeLabelIds: labels}
+      });
+    } catch(e) {
+      console.log(e);
     }
   }
 }

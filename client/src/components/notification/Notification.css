@@ -15,10 +15,24 @@ a {
   color: white;
 }
 
-.thumbnail.desktop {
+.thumbnail {
+  position: relative;
+}
+
+.thumbnail .length {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: black;
+  padding: 0.2em 0.4em;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.thumbnail img.desktop {
   height: 180px;
 }
-.thumbnail.mobile {
+.thumbnail img.mobile {
   height: 90px;
   display: none;
 }
@@ -29,7 +43,7 @@ a {
   overflow: hidden;
 }
 
-.title, .description {
+.title, .description, .date {
   margin-left: 1rem;
 }
 
@@ -53,6 +67,10 @@ a {
   cursor: pointer;
 }
 
+.date {
+  padding-bottom: 1em;
+}
+
 .notification-view .delete-icon {
   font-size: 3rem;
   cursor: pointer;
@@ -70,17 +88,29 @@ a {
 }
 
 @media screen and (max-width: 600px) {
-  .thumbnail.mobile {
+  .thumbnail img.mobile {
     display: initial;
   }
-  .thumbnail.desktop {
+  .thumbnail img.desktop {
     display: none;
+  }
+  .thumbnail .length {
+    top: 4px;
+    left: 4px;
+    background-color: black;
+    padding: 0.2em 0.4em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 0.8em;
   }
   .title {
     font-size: 1.0em;
   }
   .description {
     display: none;
+  }
+  .date {
+    padding-bottom: 0;
   }
   .delete-view {
     height: 90px;
