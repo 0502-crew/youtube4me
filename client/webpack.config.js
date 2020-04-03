@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: "./src/App.tsx",
@@ -46,7 +47,10 @@ module.exports = {
     hotOnly: true,
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([
+      {from:'src/assets',to:'assets'}
+    ]),
   ],
   // addition - add source-map support
   devtool: "source-map",
