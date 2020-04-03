@@ -2,7 +2,7 @@ body {
   background-color: #333;
 }
 main {
-  margin: 4rem ; /* Add a top margin to avoid content overlay */
+  margin: 4rem ; /* Add a top margin to avoid content overlay */;
 }
 
 @media screen and (max-width: 600px) {

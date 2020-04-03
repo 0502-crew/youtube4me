@@ -43,7 +43,7 @@ a {
   overflow: hidden;
 }
 
-.title, .description, .date {
+.video-details > div {
   margin-left: 1rem;
 }
 
@@ -67,11 +67,19 @@ a {
   cursor: pointer;
 }
 
-.date {
+.channel {
   padding-bottom: 1em;
 }
+.channel a {
+font-size: 1.2rem;
+}
 
-.notification-view .delete-icon {
+.channel .date {
+  float: right;
+  padding-right: 1em;
+}
+
+.notification-view .delete-icon svg {
   font-size: 3rem;
   cursor: pointer;
 }
@@ -109,8 +117,15 @@ a {
   .description {
     display: none;
   }
-  .date {
+  .channel {
     padding-bottom: 0;
+  }
+  .channel a {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .channel .date {
+    font-size: 0.8rem;
   }
   .delete-view {
     height: 90px;

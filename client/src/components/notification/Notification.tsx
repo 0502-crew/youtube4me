@@ -59,12 +59,17 @@ export class Notification extends React.Component<NotificationProps, Notificatio
               <span className='length'>{duration}</span>
             </a>
             <div className='video-details'>
-              <a href={videoUrl} target="_blank">
                 <div className='title'>
-                  {notification.videoDetails.title}
-                </div>
-              </a>
-              <div className='date'>{notification.videoDetails.publishedAt.replace('T',' ').replace('.000Z','')}</div>
+                  <a href={videoUrl} target="_blank">
+                    {notification.videoDetails.title}
+                  </a>
+              </div>
+              <div className='channel'>
+                <a href={`https://www.youtube.com/channel/${notification.videoDetails.channelId}`}>
+                  {notification.videoDetails.channelTitle}
+                </a>
+                <span className="date">{notification.videoDetails.publishedAt.replace('T',' ').replace('.000Z','')}</span>
+              </div>
               <div className={`description ${(this.state.expandedDescription)? 'expanded' : ''}`}>
                 {
                   descriptionLines.map((line, index) => {
@@ -85,8 +90,8 @@ export class Notification extends React.Component<NotificationProps, Notificatio
                 }
               </div>
             </div>
-            <div className='delete-icon' onClick={this.deleteNotification}>
-              <FontAwesomeIcon icon={faTrashAlt}/>
+            <div className='delete-icon'>
+              <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteNotification}/>
             </div>
           </div>
         </SwipeableViews>
