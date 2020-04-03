@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --host 192.168.1.184",
+    "@comment start": "run start script with 'npm start -- --host 192.168.1.184' (change the ip address to that of your local machine) to make it accessible over the network",
+    "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "prod": "node server.js"
   },

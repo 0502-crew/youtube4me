@@ -1,6 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 import { google, gmail_v1 } from 'googleapis';
-import { CONFIG } from '../../config/Config';
+import { CONFIG } from '@src/config/Config';
 
 export enum LABELS {
   YTNew = 'YTNew',

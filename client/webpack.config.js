@@ -50,5 +50,4 @@ module.exports = {
   ],
   // addition - add source-map support
   devtool: "source-map",
-  node: { fs: 'empty', child_process: 'empty', net: 'empty' , tls: 'empty' },
 };
