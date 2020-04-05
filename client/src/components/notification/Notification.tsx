@@ -53,14 +53,14 @@ export class Notification extends React.Component<NotificationProps, Notificatio
             <FontAwesomeIcon icon={faTrashAlt} className='delete-icon'/>
           </div>
           <div className='notification-view'>
-            <a href={videoUrl} target="_blank" className='thumbnail'>
+            <a href={videoUrl} className='thumbnail'>
               <img src={notification.videoDetails.thumbnails.medium.url} className='desktop'/>
               <img src={notification.videoDetails.thumbnails.medium.url} className='mobile'/>
               <span className='length'>{duration}</span>
             </a>
             <div className='video-details'>
                 <div className='title'>
-                  <a href={videoUrl} target="_blank">
+                  <a href={videoUrl}>
                     {notification.videoDetails.title}
                   </a>
               </div>
@@ -93,6 +93,10 @@ export class Notification extends React.Component<NotificationProps, Notificatio
             <div className='delete-icon'>
               <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteNotification}/>
             </div>
+          </div>
+          <div className='more-view'>
+            <div>Channel</div>
+            <div>Related</div>
           </div>
         </SwipeableViews>
       );

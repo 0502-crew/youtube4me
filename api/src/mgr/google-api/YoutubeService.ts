@@ -91,4 +91,8 @@ export class YoutubeService {
     }));
     return videoDetailsMap;
   }
+
+  public getSubscriptions() {
+    this.youtube.subscriptions
+  }
 }
