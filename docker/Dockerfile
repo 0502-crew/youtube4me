@@ -1,13 +1,9 @@
 FROM node:10.19.0-alpine
 RUN apk update && \
-	apk add git
-
-WORKDIR /opt
-RUN git clone https://github.com/0502-crew/youtube4me.git
-WORKDIR /opt/youtube4me
-RUN chmod +x start_all.sh
-COPY Config_client.ts /opt/youtube4me/client/src/config/Config.ts
-COPY Config_api.ts /opt/youtube4me/api/src/config/Config.ts
+	apk add git && \
+	git clone https://github.com/0502-crew/youtube4me.git /opt/youtube4me && \
+	chmod 755 /opt/youtube4me/start_all.sh
+COPY config/. /opt/youtube4me/
 EXPOSE 45011
-
-CMD start_all.sh
+WORKDIR /opt/youtube4me
+CMD ["/opt/youtube4me/start_all.sh"]
