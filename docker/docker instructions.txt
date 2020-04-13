@@ -1,5 +1,0 @@
-- Copy Dockerfile to its own folder on the server
-- In this folder, create config/client/src/config/Config.ts and config/client/src/config/Config.ts based on the Config.sample.ts from the 2 projects and edit the values
-	sudo docker build . -t 0502-crew/youtube4me
-	sudo docker container run -d --name youtube4me --network host 0502-crew/youtube4me
-- visit http://192.168.1.2:45011/

@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  api:
+    build: ./api
+    volumes:
+      - ./api/src/config:/app/src/config
+      - ./api/db:/app/db
+    ports:
+      - 45012:45012
+
+  client:
+    build: ./client
+    volumes:
+      - ./client/src/config:/app/src/config
+    ports:
+      - 8080:45011
+    depends_on:
+      - api
