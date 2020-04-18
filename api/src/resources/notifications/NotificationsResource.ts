@@ -48,11 +48,19 @@ export class NotificationsResource {
     }).filter(x => x.videoID !== null);
     const videoDetailsMap = await this.youtubeMgr.getVideoDetails(messageVideoIDs.map(x => x.videoID));
     messageVideoIDs.map(messageVideoID => {
-      newNotifications.push({
-        messageId: messageVideoID.message.id as string,
-        date: messageVideoID.message.internalDate as string,
-        videoDetails: videoDetailsMap[messageVideoID.videoID]
-      });
+      const videoDetails = videoDetailsMap[messageVideoID.videoID];
+      if (typeof videoDetails !== 'undefined' && videoDetails !== null) {
+        newNotifications.push({
+          messageId: messageVideoID.message.id as string,
+          date: messageVideoID.message.internalDate as string,
+          videoDetails
+        });
+      } else {
+        const messageId = messageVideoID.message.id;
+        if (typeof messageId !== 'undefined' && messageId !== null) {
+          this.deleteNotification(messageVideoID.message.id as string);
+        }
+      }
     });
     this.dbMgr.addNotifications(newNotifications);
     console.log(`Added ${newNotifications.length} notifications to DB and deleted ${deletedNotifications.length} in ${(Date.now() - startTime)/1000} seconds`);
