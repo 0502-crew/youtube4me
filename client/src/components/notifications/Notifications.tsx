@@ -69,7 +69,7 @@ export class Notifications extends React.Component<NotificationsProps, Notificat
             <div key={index}>
               <Notification notification={notification} />
               {
-                (index === shownNotifications.length - 1 ) ?
+                ( index >= shownNotifications.length - Notifications.SHOWN_INCREMENT ) ?
                 <VisibilitySensor onChange={this.onIncrementShownTrigger}>
                   <span className='increment-shown-trigger'>&nbsp;</span>
                 </VisibilitySensor>

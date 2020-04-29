@@ -22,8 +22,8 @@ export class NotificationsResource {
    * When the notifications are requested from this api, it will return what has been prefetched instead of making a call to google in real time
    */
   public async startPrefetchLoop() {
-    await this.updateNotifications();
     this.gmailLabels = await this.gmailMgr.getAllLabels();
+    await this.updateNotifications();
     setTimeout(() => {
       this.startPrefetchLoop();
     }, 60000);
