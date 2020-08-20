@@ -2,6 +2,7 @@ import { VideosResource } from './mgr/youtube/VideosResource';
 import * as express from 'express';
 import * as BodyParser from 'body-parser';
 import * as cors from 'cors';
+import { YoutubeRssService } from './service/YoutubeRssService';
 
 const videosResource: VideosResource = new VideosResource();
 

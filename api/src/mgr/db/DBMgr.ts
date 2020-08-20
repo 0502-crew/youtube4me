@@ -41,6 +41,10 @@ export class DBMgr {
     return videos.reverse().value();
   }
 
+  public getUnwatchedVideos(): IVideo[] {
+    return this.getAllVideos(true).filter(video => !video.watched);
+  }
+
   public addVideo(video: IVideo): void {
     this.addVideos([video]);
   }
