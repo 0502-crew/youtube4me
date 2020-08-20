@@ -2,3 +2,4 @@ node_modules
 src/config/Config.ts
 db/db.json
 dist
+subscriptions.xml
