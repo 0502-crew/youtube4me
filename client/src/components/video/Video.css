@@ -1,8 +1,8 @@
-.notification-views {
+.video-views {
   margin-bottom: 1em;
 }
 
-.notification-views.deleted {
+.video-views.deleted {
   display: none;
 }
 
@@ -10,7 +10,7 @@ a {
   color: white;
   text-decoration: inherit; /* no underline */
 }
-.notification-view, .delete-view {
+.video-view, .delete-view {
   display: flex;
   color: white;
 }
@@ -79,7 +79,7 @@ font-size: 1.2rem;
   padding-right: 1em;
 }
 
-.notification-view .delete-icon svg {
+.video-view .delete-icon svg {
   font-size: 3rem;
   cursor: pointer;
 }
@@ -130,7 +130,7 @@ font-size: 1.2rem;
   .delete-view {
     height: 90px;
   }
-  .notification-view .delete-icon {
+  .video-view .delete-icon {
     display: none;
   }
 }

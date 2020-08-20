@@ -1,25 +1,25 @@
-import './Notification.css';
+import './Video.css';
 
 import * as React from 'react';
-import { INotification } from '@src/models/api/INotification';
+import { IVideo } from '@src/models/api/IVideo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp, faTrashAlt, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import SwipeableViews from 'react-swipeable-views';
 import * as bent from 'bent';
 import { Utils } from '@src/utils/Utils';
 
-export interface NotificationProps {
-  notification: INotification;
+export interface VideoProps {
+  video: IVideo;
 }
 
-export interface NotificationState {
+export interface VideoState {
   expandedDescription: boolean;
   deleted: boolean;
 }
 
-export class Notification extends React.Component<NotificationProps, NotificationState> {
+export class Video extends React.Component<VideoProps, VideoState> {
 
-  constructor(props: NotificationProps) {
+  constructor(props: VideoProps) {
     super(props);
     this.state = {
       expandedDescription: false,
@@ -31,44 +31,39 @@ export class Notification extends React.Component<NotificationProps, Notificatio
     this.setState((state) => ({expandedDescription: !state.expandedDescription}));
   }
 
-  private deleteNotification = () => {
-    bent(`${Utils.getAPIUrl()}/deleteNotification/${this.props.notification.messageId}`)('');
+  private deleteVideo = () => {
+    bent(`${Utils.getAPIUrl()}/wached/${this.props.video.id}`)('');
     this.setState({deleted: true});
   }
 
   render(): React.ReactNode {
-    const notification = this.props.notification;
-    const descriptionLines = notification.videoDetails.description.split('\n');
-    const videoUrl = `https://www.youtube.com/watch?v=${notification.videoDetails.id}`;
-    const duration = [
-      notification.videoDetails.duration.hours,
-      notification.videoDetails.duration.minutes,
-      notification.videoDetails.duration.seconds].join(':');
+    const video = this.props.video;
+    const descriptionLines = video.description.split('\n');
+    const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
     if (this.state.deleted) {
       return null;
     } else {
       return (
-        <SwipeableViews resistance index={1} className={`notification-views ${this.state.deleted?'deleted':''}`}>
-          <div className='notification delete-view' onClick={this.deleteNotification}>
+        <SwipeableViews resistance index={1} className={`video-views ${this.state.deleted?'deleted':''}`}>
+          <div className='video delete-view' onClick={this.deleteVideo}>
             <FontAwesomeIcon icon={faTrashAlt} className='delete-icon'/>
           </div>
-          <div className='notification-view'>
+          <div className='video-view'>
             <a href={videoUrl} className='thumbnail'>
-              <img src={notification.videoDetails.thumbnails.medium.url} className='desktop'/>
-              <img src={notification.videoDetails.thumbnails.medium.url} className='mobile'/>
-              <span className='length'>{duration}</span>
+              <img src={video.thumbnail} className='desktop'/>
+              <img src={video.thumbnail} className='mobile'/>
             </a>
             <div className='video-details'>
                 <div className='title'>
                   <a href={videoUrl}>
-                    {notification.videoDetails.title}
+                    {video.title}
                   </a>
               </div>
               <div className='channel'>
-                <a href={`https://www.youtube.com/channel/${notification.videoDetails.channelId}`}>
-                  {notification.videoDetails.channelTitle}
+                <a href={`https://www.youtube.com/channel/${video.channelID}`}>
+                  {video.channelName}
                 </a>
-                <span className="date">{notification.videoDetails.publishedAt.replace('T',' ').replace('.000Z','')}</span>
+                <span className="date">{video.published.substring(0, video.published.indexOf('+')).replace('T',' ')}</span>
               </div>
               <div className={`description ${(this.state.expandedDescription)? 'expanded' : ''}`}>
                 {
@@ -91,7 +86,7 @@ export class Notification extends React.Component<NotificationProps, Notificatio
               </div>
             </div>
             <div className='delete-icon'>
-              <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteNotification}/>
+              <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteVideo}/>
             </div>
           </div>
           <div className='more-view'>

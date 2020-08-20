@@ -7,7 +7,7 @@ export class NavBar extends React.Component {
   render(): React.ReactNode {
     return (
       <div className='navbar'>
-        <a href="#">Notifications</a>
+        <a href="#">Videos</a>
         <span className="fill"></span>
         <span className="refresh" onClick={() => document.location.reload()}><FontAwesomeIcon icon={faSyncAlt} /></span>
       </div>

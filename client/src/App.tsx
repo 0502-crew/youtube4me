@@ -3,7 +3,7 @@ import './reset.css';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { Notifications } from '@src/components/notifications/Notifications';
+import { Videos } from '@src/components/videos/Videos';
 import { NavBar } from './components/navbar/NavBar';
 
 class App extends React.Component {
@@ -12,7 +12,7 @@ class App extends React.Component {
       <div className='App'>
         <NavBar />
         <main>
-          <Notifications />
+          <Videos />
         </main>
       </div>
     );

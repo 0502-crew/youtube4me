@@ -1,9 +1,9 @@
-import { NotificationsResource } from './resources/notifications/NotificationsResource';
+import { VideosResource } from './mgr/youtube/VideosResource';
 import * as express from 'express';
 import * as BodyParser from 'body-parser';
 import * as cors from 'cors';
 
-const notificationsResource: NotificationsResource = new NotificationsResource();
+const videosResource: VideosResource = new VideosResource();
 
 const app = express();
 const port = 45012;
@@ -15,18 +15,14 @@ app.use(BodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('./public'));
 
-app.get('/notifications',function(req,res) {
-  (async () => {
-    const notificationsRO = await notificationsResource.getAllNotifications();
-    res.json(notificationsRO);
-  })();
+app.get('/videos',function(req,res) {
+  const notificationsRO = videosResource.getUnwatchedVideos();
+  res.json(notificationsRO);
 });
 
-app.get('/deleteNotification/:messageid',function(req,res) {
-  (async () => {
-    const notificationsRO = await notificationsResource.deleteNotification(req.params.messageid);
-    res.json(notificationsRO);
-  })();
+app.get('/wached/:videoid',function(req,res) {
+  const notificationsRO = videosResource.videoWatched(req.params.videoid);
+  res.json(notificationsRO);
 });
 
 app.get('/test',function(req,res) {
@@ -44,7 +40,7 @@ app.get('/test',function(req,res) {
   res.send();
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Youtube4Me api listening on port ${port}!`));
 
 // Prefetch the notifications to speed up api requests to this server
-notificationsResource.startPrefetchLoop();
+videosResource.startPrefetchLoop();

@@ -1,13 +1,12 @@
-import { INotification } from './INotification';
+import { IVideo } from '@src/resources/feed/IVideo';
 
 export const INITIAL_DB: IDatabase = {
-  notifications: [],
+  videos: [],
 }
 
-export const NOTIFICATIONS = 'notifications';
-export const NOTIFICATION_VIDEO_ID = 'videoID';
-export const NOTIFICATION_DATE = 'date';
+export const VIDEOS = 'videos';
+export const PUBLISHED = 'published';
 
 export interface IDatabase {
-  notifications: INotification[];
+  videos: IVideo[];
 }
