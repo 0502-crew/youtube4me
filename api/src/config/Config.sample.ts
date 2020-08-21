@@ -21,12 +21,6 @@
 import {IConfig} from './IConfig';
 
 export const CONFIG: IConfig = {
-  blacklist: [
-    {
-      name: "1theK Originals - 원더케이 오리지널",
-      id: "UCqq-ovGE01ErlXakPihhKDA",
-    },
-  ],
   /* D-Day for email notifications */
   fromDate: "2020-08-13T00:00:00+00:00",
 }

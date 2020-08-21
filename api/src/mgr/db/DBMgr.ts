@@ -18,7 +18,7 @@ export class DBMgr {
     this.db = lowdb(adapter);
     this.db.defaults(INITIAL_DB).write();
   }
-  
+
   public static get() {
     if (typeof DBMgr.instance === 'undefined') {
       DBMgr.instance = new DBMgr();
@@ -26,12 +26,12 @@ export class DBMgr {
     return DBMgr.instance;
   }
 
-  public getVideoByVideoID(videoID: string): IVideo|null {
+  public getVideoByVideoID(videoID: string): IVideo | null {
     return this.db.get(VIDEOS)
-      .find({id: videoID})
+      .find({ id: videoID })
       .value();
   }
-  
+
   public getAllVideos(deepClone = false): IVideo[] {
     let videos = this.db.get(VIDEOS)
       .sortBy(PUBLISHED);
@@ -57,7 +57,7 @@ export class DBMgr {
     this.addVideos(newVideos);
     return newVideos.length;
   }
-  
+
   public removeVideo(id: string): void {
     this.removeVideos([id]);
   }
@@ -67,13 +67,14 @@ export class DBMgr {
 
   public videoWatched(videoID: string) {
     this.db.get(VIDEOS)
-      .find({id: videoID})
-      .assign({watched: true})
+      .find({ id: videoID })
+      .assign({ watched: true })
       .value();
   }
-  
-  public cleanOldWatchedVideos(recentVideoIDs: string[]): void {
-    this.db.get(VIDEOS).remove((video) => video.watched && !recentVideoIDs.includes(video.id)).write();
+
+  public cleanOldWatchedVideos(recentVideoIDs: string[], blacklistedChannels: string[]): void {
+    this.db.get(VIDEOS).remove((video) =>
+      (video.watched && !recentVideoIDs.includes(video.id)) || blacklistedChannels.includes(video.channelID)).write();
   }
 
 }

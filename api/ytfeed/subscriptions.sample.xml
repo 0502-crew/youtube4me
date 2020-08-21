@@ -1,0 +1,8 @@
+<opml version="1.1">
+	<!--- Download this from https://www.youtube.com/subscription_manager -->
+	<body>
+		<outline text="YouTube Subscriptions" title="YouTube Subscriptions">
+			<outline text="PlayStation" title="PlayStation" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC-2Y8dQb0S6DtpxNgAKoJKA" />
+		</outline>
+	</body>
+</opml>

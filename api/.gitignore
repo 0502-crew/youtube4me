@@ -2,4 +2,5 @@ node_modules
 src/config/Config.ts
 db/db.json
 dist
-subscriptions.xml
+ytfeed/subscriptions.xml
+ytfeed/blacklist.json

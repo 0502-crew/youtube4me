@@ -1,5 +1,4 @@
 export interface IConfig {
-  blacklist: IChannel[];
   fromDate: string;
 }
 

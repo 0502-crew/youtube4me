@@ -27,13 +27,11 @@ export class VideosResource {
   public async updateVideos(): Promise<void> {
     const startTime = Date.now();
 
-    let recentVideos: IVideo[] = await new YoutubeRssService().getAllVideos();
-    const blacklistedChannelIDs = CONFIG.blacklist.map(item => item.id);
-    recentVideos = recentVideos.filter(video => !blacklistedChannelIDs.includes(video.channelID) && video.published.localeCompare(CONFIG.fromDate) > 0);
-
+    const ytService = new YoutubeRssService();
+    let recentVideos: IVideo[] = await ytService.getAllVideos();
     const recentVideoIDs = recentVideos.map(video => video.id);
     if(recentVideos.length > 0) {
-      this.dbMgr.cleanOldWatchedVideos(recentVideoIDs);
+      this.dbMgr.cleanOldWatchedVideos(recentVideoIDs, ytService.getBlacklist());
       const count = this.dbMgr.mergeNewVideos(recentVideos);
       console.log(`Added ${count} videos to DB in ${(Date.now() - startTime)/1000} seconds`);
     }
