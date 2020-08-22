@@ -7,5 +7,12 @@ export interface IVideo {
   published: string,
   thumbnail: string,
   description: string,
-  watched?: boolean
+  watched?: boolean,
+  duration?: IDuration
+}
+
+export interface IDuration {
+  hours: string,
+  minutes: string,
+  seconds: string,
 }

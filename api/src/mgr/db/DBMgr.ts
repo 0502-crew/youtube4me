@@ -51,11 +51,10 @@ export class DBMgr {
   public addVideos(videos: IVideo[]): void {
     this.db.get(VIDEOS).push(...videos).write();
   }
-  public mergeNewVideos(videos: IVideo[]): Number {
+  public filterNewVideos(videos: IVideo[]): IVideo[] {
     const existingVideoIDs = this.db.get(VIDEOS).value().map(video => video.id);
     const newVideos = videos.filter(newVideo => !existingVideoIDs.includes(newVideo.id));
-    this.addVideos(newVideos);
-    return newVideos.length;
+    return newVideos;
   }
 
   public removeVideo(id: string): void {

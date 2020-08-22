@@ -11,29 +11,32 @@ export class YoutubeRssService {
   constructor() {
     const blacklistText = fs.readFileSync(path.resolve(process.cwd(), 'ytfeed/blacklist.json'), 'utf8');
     this.blacklist = JSON.parse(blacklistText).map((channel: IChannel) => channel.id);
-    console.log(this.blacklist);
-  }
-
-  public async getAllVideos() {
-    let subscriptionsXml = fs.readFileSync(path.resolve(process.cwd(), 'ytfeed/subscriptions.xml'), 'utf8');
-    const subscriptions = await xml2js.parseStringPromise(subscriptionsXml, {trim: true, mergeAttrs: true});
-    const urls = subscriptions.opml.body[0].outline[0].outline.map(entry => entry.xmlUrl[0]);
-    const data = await Promise.all(urls.map(url => this.fetchUrl(url)));
-    const videosArray: IVideo[][] = await Promise.all(data.map(feedXml => this.parseFeed(feedXml)));
-    const videos: IVideo[] = Array.prototype.concat(...videosArray);
-    return videos;
   }
 
   public getBlacklist(): string[] {
     return this.blacklist;
   }
 
-  private async fetchUrl(url: string): Promise<any> {
+  public async getAllVideos(): Promise<IVideo[]> {
+    let subscriptionsXml = fs.readFileSync(path.resolve(process.cwd(), 'ytfeed/subscriptions.xml'), 'utf8');
+    const subscriptions = await xml2js.parseStringPromise(subscriptionsXml, {trim: true, mergeAttrs: true});
+    // Array of urls to channel feeds
+    const urls: string[] = subscriptions.opml.body[0].outline[0].outline.map(entry => entry.xmlUrl[0]);
+    // Array of XML strings of the feed for each individual channel
+    const data: string[] = await Promise.all(urls.map(url => this.fetchUrl(url)));
+    // Array of Arrays of IVideos for each separate channel
+    const videosArray: IVideo[][] = await Promise.all(data.map(feedXml => this.parseFeed(feedXml)));
+    // Array of all IVideos of all channels combined
+    const videos: IVideo[] = Array.prototype.concat(...videosArray);
+    return videos;
+  }
+
+  private async fetchUrl(url: string): Promise<string> {
     const response = await fetch(url);
     return await response.text();
   }
 
-  private async parseFeed(feedXml): Promise<IVideo[]> {
+  private async parseFeed(feedXml: string): Promise<IVideo[]> {
     const feed = await xml2js.parseStringPromise(feedXml, {trim: true, mergeAttrs: true});
     const channelName = feed.feed.title[0];
     const channelID = feed.feed['yt:channelId'][0];

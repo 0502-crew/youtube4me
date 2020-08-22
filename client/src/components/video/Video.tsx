@@ -40,6 +40,10 @@ export class Video extends React.Component<VideoProps, VideoState> {
     const video = this.props.video;
     const descriptionLines = video.description.split('\n');
     const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+    const duration = video.duration ? [
+      video.duration.hours,
+      video.duration.minutes,
+      video.duration.seconds].join(':') : null;
     if (this.state.deleted) {
       return null;
     } else {
@@ -52,6 +56,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
             <a href={videoUrl} className='thumbnail'>
               <img src={video.thumbnail} className='desktop'/>
               <img src={video.thumbnail} className='mobile'/>
+              <span className='length'>{duration}</span>
             </a>
             <div className='video-details'>
                 <div className='title'>

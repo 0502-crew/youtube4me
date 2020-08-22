@@ -23,4 +23,6 @@ import {IConfig} from './IConfig';
 export const CONFIG: IConfig = {
   /* D-Day for email notifications */
   fromDate: "2020-08-13T00:00:00+00:00",
+  /* Go to https://console.developers.google.com/apis/credentials to generate an API key */
+  googleAPIKey: "somekey"
 }
