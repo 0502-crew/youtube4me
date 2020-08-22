@@ -3,6 +3,7 @@ import { VideoRO } from './VideoRO';
 import { YoutubeRssService } from '@src/service/YoutubeRssService';
 import { IVideo } from '@src/resources/feed/IVideo';
 import { YoutubeAPIService } from '@src/service/YoutubeAPIService';
+import { CONFIG } from '@src/config/Config';
 
 export class VideosResource {
   private dbMgr = DBMgr.get();
@@ -30,6 +31,7 @@ export class VideosResource {
     const ytService = new YoutubeRssService();
     let recentVideos: IVideo[] = await ytService.getAllVideos();
     if(recentVideos.length > 0) {
+      recentVideos = recentVideos.filter(video => video.published > CONFIG.fromDate);
       const recentVideoIDs = recentVideos.map(video => video.id);
       this.dbMgr.cleanOldWatchedVideos(recentVideoIDs, ytService.getBlacklist());
       const newVideos = this.dbMgr.filterNewVideos(recentVideos);
