@@ -82,7 +82,6 @@ export class Videos extends React.Component<VideosProps, VideosState> {
         <ToastContainer
           position="bottom-right"
           pauseOnHover
-          newestOnTop
           closeOnClick={false}
           transition={Slide} />
       </div>
