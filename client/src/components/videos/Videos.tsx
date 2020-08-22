@@ -1,4 +1,5 @@
-import './Videos.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './Videos.less';
 
 import * as React from 'react';
 import * as bent from 'bent';
@@ -7,7 +8,7 @@ import { VideosRO } from '@src/models/api/VideosRO';
 import { Video } from '../video/Video';
 import VisibilitySensor from 'react-visibility-sensor';
 import { Utils } from '@src/utils/Utils';
-
+import { ToastContainer, Slide } from 'react-toastify';
 
 interface VideosState {
   videos: IVideo[]
@@ -78,6 +79,12 @@ export class Videos extends React.Component<VideosProps, VideosState> {
             </div>
           ))
         }
+        <ToastContainer
+          position="bottom-right"
+          pauseOnHover
+          newestOnTop
+          closeOnClick={false}
+          transition={Slide} />
       </div>
     );
   }

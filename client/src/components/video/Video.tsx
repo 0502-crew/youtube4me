@@ -1,12 +1,12 @@
-import './Video.css';
+import './Video.less';
 
 import * as React from 'react';
 import { IVideo } from '@src/models/api/IVideo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp, faTrashAlt, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import SwipeableViews from 'react-swipeable-views';
-import * as bent from 'bent';
-import { Utils } from '@src/utils/Utils';
+import { toast } from 'react-toastify';
+import { WatchedToast } from './WatchedToast';
 
 export interface VideoProps {
   video: IVideo;
@@ -32,8 +32,7 @@ export class Video extends React.Component<VideoProps, VideoState> {
   }
 
   private deleteVideo = () => {
-    bent(`${Utils.getAPIUrl()}/wached/${this.props.video.id}`)('');
-    this.setState({deleted: true});
+    new WatchedToast(this);
   }
 
   render(): React.ReactNode {
@@ -59,10 +58,10 @@ export class Video extends React.Component<VideoProps, VideoState> {
               <span className='length'>{duration}</span>
             </a>
             <div className='video-details'>
-                <div className='title'>
-                  <a href={videoUrl}>
-                    {video.title}
-                  </a>
+              <div className='title'>
+                <a href={videoUrl}>
+                  {video.title}
+                </a>
               </div>
               <div className='channel'>
                 <a href={`https://www.youtube.com/channel/${video.channelID}`}>
@@ -93,10 +92,6 @@ export class Video extends React.Component<VideoProps, VideoState> {
             <div className='delete-icon'>
               <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteVideo}/>
             </div>
-          </div>
-          <div className='more-view'>
-            <div>Channel</div>
-            <div>Related</div>
           </div>
         </SwipeableViews>
       );

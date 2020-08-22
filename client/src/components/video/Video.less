@@ -1,0 +1,159 @@
+.video-views {
+  margin-bottom: 1em;
+
+  &.deleted {
+    display: none;
+  }
+
+  a {
+    color: white;
+    text-decoration: inherit; /* no underline */
+  }
+
+  .video-view, .delete-view {
+    display: flex;
+    color: white;
+  }
+
+  .video-view {
+    .thumbnail {
+      position: relative;
+
+      .length {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background-color: black;
+        padding: 0.2em 0.4em;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+
+        @media screen and (max-width: 600px) {
+          top: 4px;
+          left: 4px;
+          background-color: black;
+          padding: 0.2em 0.4em;
+          font-family: Arial, Helvetica, sans-serif;
+          font-weight: bold;
+          font-size: 0.8em;
+        }
+      }
+
+      img {
+        &.desktop {
+          height: 180px;
+
+          @media screen and (max-width: 600px) {
+            display: none;
+          }
+        }
+        
+        &.mobile {
+          height: 90px;
+          display: none;
+
+          @media screen and (max-width: 600px) {
+            display: initial;
+          }
+        }
+      }
+    }
+
+    .video-details {
+      display: initial;
+      flex-grow: 1;
+      overflow: hidden;
+    
+      &>div {
+        margin-left: 1rem;
+      }
+
+      .title {
+        font-size: 1.5em;
+        margin-bottom: 1rem;
+        
+        @media screen and (max-width: 600px) {
+          font-size: 1em;
+        }
+      }
+
+      .description {
+        @media screen and (max-width: 600px) {
+          display: none;
+        }
+
+        &.expanded .overflow {
+          display: inherit;
+        }
+
+        .overflow {
+          display:none;
+        }
+
+        .expand {
+          border: solid 2px white;
+          border-radius: 5px;
+          width: 6em;
+          padding: 0.3em;
+          margin-top: 1em;
+          cursor: pointer;
+        }
+      }
+
+      .channel {
+        padding-bottom: 1em;
+
+        @media screen and (max-width: 600px) {
+          padding-bottom: 0;
+        }
+
+        a {
+          font-size: 1.2rem;
+
+          @media screen and (max-width: 600px) {
+            font-size: 1rem;
+            font-weight: bold;
+          }
+        }
+
+        .date {
+          float: right;
+          padding-right: 1em;
+
+          @media screen and (max-width: 600px) {
+            font-size: 0.8rem;
+          }
+        }
+      }
+      
+    }
+    
+    .delete-icon{
+      @media screen and (max-width: 600px) {
+        display: none;
+      }
+
+      svg {
+        font-size: 3rem;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .delete-view {
+    border: solid 2px white;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 180px;
+    
+    @media screen and (max-width: 600px) {
+      height: 90px;
+    }
+    
+    .delete-icon {
+      font-size: 3rem;
+      margin: auto;
+    }
+  }
+  
+}
