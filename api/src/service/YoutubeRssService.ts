@@ -37,24 +37,29 @@ export class YoutubeRssService {
   }
 
   private async parseFeed(feedXml: string): Promise<IVideo[]> {
-    const feed = await xml2js.parseStringPromise(feedXml, {trim: true, mergeAttrs: true});
-    const channelName = feed.feed.title[0];
-    const channelID = feed.feed['yt:channelId'][0];
-    if(this.getBlacklist().includes(channelID)) {
-      return [];
-    } else {
-      return feed.feed.entry.map((entry: any): IVideo => {
-        return {
-          channelID,
-          channelName,
-          id: entry['yt:videoId'][0],
-          link: entry.link[0].href[0],
-          title: entry.title[0],
-          published: entry.published[0],
-          thumbnail: entry['media:group'][0]['media:thumbnail'][0].url[0],
-          description: entry['media:group'][0]['media:description'][0],
-        };
-      });
+    try {
+      const feed = await xml2js.parseStringPromise(feedXml, {trim: true, mergeAttrs: true});
+      const channelName = feed.feed.title[0];
+      const channelID = feed.feed['yt:channelId'][0];
+      if(this.getBlacklist().includes(channelID)) {
+        return [];
+      } else {
+        return feed.feed.entry.map((entry: any): IVideo => {
+          return {
+            channelID,
+            channelName,
+            id: entry['yt:videoId'][0],
+            link: entry.link[0].href[0],
+            title: entry.title[0],
+            published: entry.published[0],
+            thumbnail: entry['media:group'][0]['media:thumbnail'][0].url[0],
+            description: entry['media:group'][0]['media:description'][0],
+          };
+        });
+      }
+    } catch(error) {
+      console.log('Error trying to parse xml:\n' + feedXml + '\n' + error);
+      return Promise.resolve([]);
     }
   }
 }
