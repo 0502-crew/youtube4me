@@ -32,11 +32,19 @@ export class YoutubeRssService {
   }
 
   private async fetchUrl(url: string): Promise<string> {
-    const response = await fetch(url);
-    return await response.text();
+    try {
+      const response = await fetch(url);
+      return await response.text();
+    } catch(error) {
+      console.log('Error trying to download xml:\n' + url + '\n' + error);
+      return Promise.resolve('');
+    }
   }
 
   private async parseFeed(feedXml: string): Promise<IVideo[]> {
+    if(feedXml.length === 0) {
+      return Promise.resolve([]);
+    }
     try {
       const feed = await xml2js.parseStringPromise(feedXml, {trim: true, mergeAttrs: true});
       const channelName = feed.feed.title[0];
