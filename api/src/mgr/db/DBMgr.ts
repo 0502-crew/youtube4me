@@ -68,7 +68,7 @@ export class DBMgr {
     this.db.get(VIDEOS)
       .find({ id: videoID })
       .assign({ watched: true })
-      .value();
+      .write();
   }
 
   public cleanOldWatchedVideos(recentVideoIDs: string[], blacklistedChannels: string[]): void {
