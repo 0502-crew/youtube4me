@@ -62,11 +62,12 @@ export class YoutubeRssService {
             published: entry.published[0],
             thumbnail: entry['media:group'][0]['media:thumbnail'][0].url[0],
             description: entry['media:group'][0]['media:description'][0],
+            added: new Date(),
           };
         });
       }
     } catch(error) {
-      console.log('Error trying to parse xml:\n' + feedXml + '\n' + error);
+      console.log('Error trying to parse xml:\n' + error);
       return Promise.resolve([]);
     }
   }

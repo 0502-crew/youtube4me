@@ -8,7 +8,8 @@ export interface IVideo {
   thumbnail: string,
   description: string,
   watched?: boolean,
-  duration?: IDuration
+  duration?: IDuration,
+  added?: Date
 }
 
 export interface IDuration {
