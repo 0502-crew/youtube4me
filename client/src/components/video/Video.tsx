@@ -5,7 +5,6 @@ import { IVideo } from '@src/models/api/IVideo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp, faTrashAlt, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import SwipeableViews from 'react-swipeable-views';
-import { toast } from 'react-toastify';
 import { WatchedToast } from './WatchedToast';
 
 export interface VideoProps {

@@ -83,7 +83,8 @@ export class Videos extends React.Component<VideosProps, VideosState> {
           position="bottom-right"
           pauseOnHover
           closeOnClick={false}
-          transition={Slide} />
+          transition={Slide}
+          pauseOnFocusLoss={false} />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as lowdb from 'lowdb';
 import * as FileSync from 'lowdb/adapters/FileSync';
-import { INITIAL_DB, IDatabase, VIDEOS, PUBLISHED } from './IDatabase';
+import { INITIAL_DB, IDatabase, TABLE_VIDEOS, ATTR_PUBLISHED, TABLE_WATCHED } from './IDatabase';
 import { IVideo } from '@src/resources/feed/IVideo';
 
 /**
@@ -27,32 +27,38 @@ export class DBMgr {
   }
 
   public getVideoByVideoID(videoID: string): IVideo | null {
-    return this.db.get(VIDEOS)
+    return this.db.get(TABLE_VIDEOS)
       .find({ id: videoID })
       .value();
   }
 
   public getAllVideos(deepClone = false): IVideo[] {
-    let videos = this.db.get(VIDEOS)
-      .sortBy(PUBLISHED);
+    let videos = this.db.get(TABLE_VIDEOS)
+      .sortBy(ATTR_PUBLISHED);
     if (deepClone) {
       videos = videos.cloneDeep();
     }
     return videos.reverse().value();
   }
 
+  public getAllWatchedIds(): string[] {
+    return this.db.get(TABLE_WATCHED).value();
+  }
+
   public getUnwatchedVideos(): IVideo[] {
-    return this.getAllVideos(true).filter(video => !video.watched);
+    const allVideos = this.getAllVideos(true).filter(video => !video.watched);
+    const allWatchedIDs = this.getAllWatchedIds();
+    return allVideos.filter(video => !allWatchedIDs.includes(video.id));
   }
 
   public addVideo(video: IVideo): void {
     this.addVideos([video]);
   }
   public addVideos(videos: IVideo[]): void {
-    this.db.get(VIDEOS).push(...videos).write();
+    this.db.get(TABLE_VIDEOS).push(...videos).write();
   }
   public filterNewVideos(videos: IVideo[]): IVideo[] {
-    const existingVideoIDs = this.db.get(VIDEOS).value().map(video => video.id);
+    const existingVideoIDs = this.db.get(TABLE_VIDEOS).value().map(video => video.id);
     const newVideos = videos.filter(newVideo => !existingVideoIDs.includes(newVideo.id));
     return newVideos;
   }
@@ -61,19 +67,11 @@ export class DBMgr {
     this.removeVideos([id]);
   }
   public removeVideos(ids: string[]): void {
-    this.db.get(VIDEOS).remove((video) => ids.includes(video.id)).write();
+    this.db.get(TABLE_VIDEOS).remove((video) => ids.includes(video.id)).write();
   }
 
   public videoWatched(videoID: string) {
-    this.db.get(VIDEOS)
-      .find({ id: videoID })
-      .assign({ watched: true })
-      .write();
+    this.db.get(TABLE_WATCHED).push(videoID).write();
+    this.db.get(TABLE_VIDEOS).remove({id: videoID}).write();
   }
-
-  public cleanOldWatchedVideos(recentVideoIDs: string[], blacklistedChannels: string[]): void {
-    this.db.get(VIDEOS).remove((video) =>
-      (video.watched && !recentVideoIDs.includes(video.id)) || blacklistedChannels.includes(video.channelID)).write();
-  }
-
 }

@@ -22,7 +22,7 @@ export class VideosResource {
     await this.updateVideos();
     setTimeout(() => {
       this.startPrefetchLoop();
-    }, 60000);
+    }, 5000);
   }
 
   public async updateVideos(): Promise<void> {
@@ -31,9 +31,13 @@ export class VideosResource {
     const ytService = new YoutubeRssService();
     let recentVideos: IVideo[] = await ytService.getAllVideos();
     if(recentVideos.length > 0) {
-      recentVideos = recentVideos.filter(video => video.published > CONFIG.fromDate);
-      const recentVideoIDs = recentVideos.map(video => video.id);
-      this.dbMgr.cleanOldWatchedVideos(recentVideoIDs, ytService.getBlacklist());
+      const blacklistedChannels = ytService.getBlacklist();
+      const watchedIds = this.dbMgr.getAllWatchedIds();
+      recentVideos = recentVideos.filter(video =>
+        video.published > CONFIG.fromDate // start date for all videos
+        && !blacklistedChannels.includes(video.channelID) //ignore blacklisted channels
+        && !watchedIds.includes(video.id) // do not add watched videos again
+      ); 
       const newVideos = this.dbMgr.filterNewVideos(recentVideos);
       await new YoutubeAPIService().setVideoDurations(newVideos);
       this.dbMgr.addVideos(newVideos);
