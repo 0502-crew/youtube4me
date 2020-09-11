@@ -30,7 +30,7 @@
     "google-auth-library": "^5.10.1",
     "googleapis": "^48.0.0",
     "lowdb": "^1.0.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "tsconfig-paths": "^3.9.0",
     "webpack": "^4.42.1",
     "webpack-node-externals": "^1.7.2",
