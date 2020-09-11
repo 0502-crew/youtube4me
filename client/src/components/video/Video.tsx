@@ -6,14 +6,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleDown, faChevronCircleUp, faTrashAlt, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import SwipeableViews from 'react-swipeable-views';
 import { WatchedToast } from './WatchedToast';
+import VisibilitySensor from 'react-visibility-sensor';
 
 export interface VideoProps {
   video: IVideo;
+  hasVisibilitySensor: boolean;
+  incrementTotalShown: () => void;
 }
 
 export interface VideoState {
   expandedDescription: boolean;
   deleted: boolean;
+  isSeen: boolean;
 }
 
 export class Video extends React.Component<VideoProps, VideoState> {
@@ -22,7 +26,8 @@ export class Video extends React.Component<VideoProps, VideoState> {
     super(props);
     this.state = {
       expandedDescription: false,
-      deleted: false
+      deleted: false,
+      isSeen: false
     };
   }
 
@@ -32,6 +37,13 @@ export class Video extends React.Component<VideoProps, VideoState> {
 
   private deleteVideo = () => {
     new WatchedToast(this);
+  }
+
+  private onSeen = (isVisible: boolean): void => {
+    if (isVisible) {
+      this.setState({isSeen: true});
+      this.props.incrementTotalShown();
+    }
   }
 
   render(): React.ReactNode {
@@ -91,6 +103,12 @@ export class Video extends React.Component<VideoProps, VideoState> {
             <div className='delete-icon'>
               <FontAwesomeIcon icon={faTrashAlt} onClick={this.deleteVideo}/>
             </div>
+            {(!this.state.isSeen)
+              ? <VisibilitySensor onChange={this.onSeen}>
+                  <span className='increment-shown-trigger'>&nbsp;</span>
+                </VisibilitySensor>
+              : null
+            }
           </div>
         </SwipeableViews>
       );

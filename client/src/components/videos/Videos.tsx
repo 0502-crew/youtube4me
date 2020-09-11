@@ -54,30 +54,15 @@ export class Videos extends React.Component<VideosProps, VideosState> {
     this.setState({totalShown});
   }
 
-  private onIncrementShownTrigger = (isVisible: boolean) => {
-    if (isVisible) {
-      this.incrementTotalShown();
-    }
-  }
-
   render(): React.ReactNode {
 
     const shownVideos = this.state.videos.slice(0, this.state.totalShown);
     return (
       <div className='videos'>
         {
-          shownVideos.map((video, index) => (
-            <div key={index}>
-              <Video video={video} />
-              {
-                ( index >= shownVideos.length - Videos.SHOWN_INCREMENT ) ?
-                <VisibilitySensor onChange={this.onIncrementShownTrigger}>
-                  <span className='increment-shown-trigger'>&nbsp;</span>
-                </VisibilitySensor>
-                : null
-              }
-            </div>
-          ))
+          shownVideos.map((video, index) =>
+            <Video key={index} video={video} hasVisibilitySensor={index >= shownVideos.length - Videos.SHOWN_INCREMENT} incrementTotalShown={this.incrementTotalShown}/>
+          )
         }
         <ToastContainer
           position="bottom-right"
